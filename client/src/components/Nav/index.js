@@ -1,11 +1,19 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 
 function Nav() {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-      <a className="navbar-brand" href="/">
+    <Link to={"/"}>
         React Reading List
-      </a>
+
+    </Link>
+    <Link to={"./search"}>
+        Search
+    </Link>
+      <Link to={"./saved"}>
+        Saved
+      </Link>
     </nav>
   );
 }

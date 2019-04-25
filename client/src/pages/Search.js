@@ -7,12 +7,9 @@ import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
 import { Input, TextArea, FormBtn } from "../components/Form";
 
-class Books extends Component {
+class Search extends Component {
   state = {
-    books: [],
-    title: "",
-    author: "",
-    synopsis: ""
+    books: []
   };
 
   componentDidMount() {
@@ -27,12 +24,6 @@ class Books extends Component {
       .catch(err => console.log(err));
   };
 
-  deleteBook = id => {
-    API.deleteBook(id)
-      .then(res => this.loadBooks())
-      .catch(err => console.log(err));
-  };
-
   handleInputChange = event => {
     const { name, value } = event.target;
     this.setState({
@@ -42,20 +33,7 @@ class Books extends Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
-    console.log({
-        title: this.state.title,
-        author: this.state.author,
-        synopsis: this.state.synopsis
-    })
-    if (this.state.title && this.state.author) {
-      API.saveBook({
-        title: this.state.title,
-        author: this.state.author,
-        synopsis: this.state.synopsis
-      })
-        .then(res => this.loadBooks())
-        .catch(err => console.log(err));
-    }
+
   };
 
   render() {
@@ -120,4 +98,4 @@ class Books extends Component {
   }
 }
 
-export default Books;
+export default Search;

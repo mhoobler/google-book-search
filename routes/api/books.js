@@ -13,4 +13,8 @@ router
   .put(booksController.update)
   .delete(booksController.remove);
 
+router.route("/saved");
+
+router.route("/search");
+
 module.exports = router;
