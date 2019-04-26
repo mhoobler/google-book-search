@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import DeleteBtn from "../components/DeleteBtn";
+import SaveBtn from "../components/SaveBtn";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
+import API2 from "../utils/API2";
 import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
@@ -9,17 +10,18 @@ import { Input, TextArea, FormBtn } from "../components/Form";
 
 class Search extends Component {
   state = {
-    books: []
+    books: [],
+    title: ""
   };
 
   componentDidMount() {
-    this.loadBooks();
+    // this.loadBooks();
   }
 
   loadBooks = () => {
     API.getBooks()
       .then(res =>
-        this.setState({ books: res.data, title: "", author: "", synopsis: "" })
+        this.setState()
       )
       .catch(err => console.log(err));
   };
@@ -29,11 +31,38 @@ class Search extends Component {
     this.setState({
       [name]: value
     });
+    console.log(this.state.title);
+  };
+
+  saveBook = bookData => {
+    console.log(bookData);
+    API2.saveBook(bookData)
+      .then(res => this.loadBooks())
+      .catch(err => console.log(err));
   };
 
   handleFormSubmit = event => {
     event.preventDefault();
 
+    API2.searchBook(this.state.title)
+      .then(res => {
+        console.log(res.data.items);
+        var objArr = [];
+
+        res.data.items.map( item => 
+
+          objArr.push({
+            title: item.volumeInfo.title,
+            author: item.volumeInfo.authors,
+            synopsis: item.volumeInfo.description,
+            img: item.volumeInfo.imageLinks.smallThumbnail
+          }))
+
+        this.setState({
+          books: objArr
+        })
+      })
+      .catch(err => console.log(err));
   };
 
   render() {
@@ -41,9 +70,7 @@ class Search extends Component {
       <Container fluid>
         <Row>
           <Col size="md-6">
-            <Jumbotron>
-              <h1>Search</h1>
-            </Jumbotron>
+              <h1 style={{textAlign: "center"}}>Search</h1>
             <form>
               <Input
                 value={this.state.title}
@@ -51,20 +78,8 @@ class Search extends Component {
                 name="title"
                 placeholder="Title (required)"
               />
-              <Input
-                value={this.state.author}
-                onChange={this.handleInputChange}
-                name="author"
-                placeholder="Author (required)"
-              />
-              <TextArea
-                value={this.state.synopsis}
-                onChange={this.handleInputChange}
-                name="synopsis"
-                placeholder="Synopsis (Optional)"
-              />
               <FormBtn
-                disabled={!(this.state.author && this.state.title)}
+                disabled={!this.state.title}
                 onClick={this.handleFormSubmit}
               >
                 Submit Book
@@ -77,14 +92,14 @@ class Search extends Component {
             </Jumbotron>
             {this.state.books.length ? (
               <List>
-                {this.state.books.map(book => (
-                  <ListItem key={book._id}>
+                {this.state.books.map( (book, index) => (
+                  <ListItem key={index}>
                     <Link to={"/books/" + book._id}>
                       <strong>
                         {book.title} by {book.author}
                       </strong>
                     </Link>
-                    <DeleteBtn onClick={() => this.deleteBook(book._id)} />
+                    <SaveBtn onClick={() => this.saveBook(book)} />
                   </ListItem>
                 ))}
               </List>
