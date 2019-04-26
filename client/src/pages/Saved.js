@@ -42,7 +42,7 @@ class Saved extends Component {
         <Row>
           <Col size="md-6">
             <Jumbotron>
-              <h1>What Books Should I Read?</h1>
+              <h1>Saved</h1>
             </Jumbotron>
             <form>
               <Input

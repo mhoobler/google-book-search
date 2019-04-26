@@ -6,7 +6,6 @@ function Nav() {
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
     <Link to={"/"}>
         React Reading List
-
     </Link>
     <Link to={"./search"}>
         Search
